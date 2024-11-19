@@ -6,7 +6,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Error from '@/components/Error.vue'
 import type { ICreateClasseInput } from './types/createClasse.types'
-import { createClasseHttp } from '@/views/admin/createClasse/actions/CreateClasse'
+import { createClasseHttp } from './actions/CreateClasse'
 
 import { showError, successMsg } from '@/helper/Toastnotification'
 import BaseBtn from '../../../components/BaseBtn.vue'

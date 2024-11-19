@@ -61,10 +61,16 @@ import { userIsLoggedInHttp } from "./actions/UserIsLoggedIn";
                     <RouterLink class="nav-link" aria-current="page" to="/admin">Dashbaord</RouterLink>
                 </li>
                 <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-classe">Create-post</RouterLink>
+                    <RouterLink class="nav-link" to="/create-classe">Creer une classe</RouterLink>
                 </li>
                 <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/classes-list">Post-lists</RouterLink>
+                    <RouterLink class="nav-link" to="/classes-list">Liste des classes</RouterLink>
+                </li>
+                <li class="nav-item" style="font-weight: bold">
+                    <RouterLink class="nav-link" to="/create-matiere">Creer ne matiere</RouterLink>
+                </li>
+                <li class="nav-item" style="font-weight: bold">
+                    <RouterLink class="nav-link" to="/matieres-list">Liste des matieres</RouterLink>
                 </li>
                 </ul>
             </div>

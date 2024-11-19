@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { getClassesHttp, type GetClassesResponseType } from '../actions/GetClassesList';
+import { getClassesHttp, type GetClassesResponseType } from './actions/GetClassesList';
 import { myDebounce } from '@/helper/utils';
 import { confirmDelation } from '@/helper/SweetAlert';
-import { deleteClasseHttp } from '../actions/DeleteClasse';
+import { deleteClasseHttp } from './actions/DeleteClasse';
 import { successMsg } from '@/helper/Toastnotification';
 import ClasseTable from './components/ClasseTable.vue';
 import type { IEditClasseDataInput } from './types/classesList-types';

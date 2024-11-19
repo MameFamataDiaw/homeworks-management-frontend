@@ -1,6 +1,6 @@
 import { APP } from "@/shared/App";
 import { verifyToken } from "@/helper/verifyToken";
-import type { IClassesList } from "../classesList/types/classesList-types";
+import type { IClassesList } from "../../classesList/types/classesList-types";
 
 export type GetClassesResponseType = {
   data: Array<IClassesList>

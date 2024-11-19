@@ -44,7 +44,17 @@ const router = createRouter({
         {
           path: '/create-matiere',
           name: 'create-matiere',
-          component: () => import('../views/admin/CreateMatierePage.vue'),
+          component: () => import('../views/admin/createMatiere/CreateMatierePage.vue'),
+        },
+        {
+          path: '/matieres-list',
+          name: 'matieres-list',
+          component: () => import('../views/admin/matieresList/MatieresListPage.vue'),
+        },
+        {
+          path: "/assign-subjects",
+          name: "AssignSubjects",
+          component: () => import("@/views/admin/assignSubjects/AssignSubjectsPage.vue"),
         },
       ]
     }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GetClassesResponseType } from '../../actions/GetClassesList';
+import type { GetClassesResponseType } from '../actions/GetClassesList';
 import type { IEditClasseDataInput } from '../types/classesList-types';
 
 
