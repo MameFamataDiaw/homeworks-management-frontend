@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { getUserData } from "@/helper/getUserData";
   import { RouterLink, RouterView } from "vue-router";
-import { logoutUserHttp } from "./actions/LogoutUser";
+import { logoutUserHttp } from "./admin/actions/LogoutUser";
 import { successMsg } from "@/helper/Toastnotification";
 import { onMounted } from "vue";
-import { userIsLoggedInHttp } from "./actions/UserIsLoggedIn";
+import { userIsLoggedInHttp } from "./admin/actions/UserIsLoggedIn";
 
   const userData = getUserData()
 
@@ -58,28 +58,7 @@ import { userIsLoggedInHttp } from "./actions/UserIsLoggedIn";
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <RouterLink class="nav-link" aria-current="page" to="/admin">Dashbaord</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-classe">Creer une classe</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/classes-list">Liste des classes</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-matiere">Creer ne matiere</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/matieres-list">Liste des matieres</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-enseignant">Ajouter un enseignant</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-parent">Ajouter un parent</RouterLink>
-                </li>
-                <li class="nav-item" style="font-weight: bold">
-                    <RouterLink class="nav-link" to="/create-eleve">Ajouter un eleve</RouterLink>
+                    <RouterLink class="nav-link" aria-current="page" to="/dashboard">Dashbaord</RouterLink>
                 </li>
                 </ul>
             </div>

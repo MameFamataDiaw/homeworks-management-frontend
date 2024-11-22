@@ -6,7 +6,7 @@ import { required, email } from '@vuelidate/validators'
 import Error from '@/components/Error.vue';
 import type { ILoginInput } from './auth-types';
 import { loginUserHttp } from './actions/LoginUser';
-import { showError } from '@/helper/Toastnotification';
+import { showError, successMsg } from '@/helper/Toastnotification';
 import BaseBtn from '@/components/BaseBtn.vue';
 
 const loginInput = ref<ILoginInput> ({
@@ -31,17 +31,28 @@ async function loginUser(){
     try {
         loadingStatus.value = true
         const data = await loginUserHttp(loginInput.value)
+
+        // Verifier si une action est requise
+        if (data.action_required === "change_password") {
+          localStorage.setItem('userData', JSON.stringify(data));
+          successMsg(data.message);
+          window.location.href = "/change-password";
+          return
+        }
         localStorage.setItem('userData',JSON.stringify(data))
-        window.location.href="/admin"
+
+        if (data.user.role === 'admin') {
+          window.location.href="/admin"
+        } else {
+          window.location.href="/dashboard";
+        }
+
         loadingStatus.value = false
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error:any) {
         loadingStatus.value = false
-        showError(error.message)
-        // for(const message of error as string[]){
-            
-        // }
-    }
+        showError(error.message || "Une erreur s'est produite.");
+      }
 }
 </script>
 
@@ -71,6 +82,6 @@ async function loginUser(){
             </div>
         </div>
         <div class="col-md-4"></div>
-        <div class="col-md-4"></div>        
+        <div class="col-md-4"></div>
     </div>
 </template>

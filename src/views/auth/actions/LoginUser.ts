@@ -2,33 +2,35 @@ import { APP } from "@/shared/App";
 import type { ILoginInput } from "../auth-types";
 
 export type LoginResponseType = {
-    user : {
-        id:number
-        prenom:string
-        nom:string
-        email:string
-        // password:string
-    },
-    token:string
+  message: string,
+  action_required: string,
+  user: {
+    id: number
+    prenom: string
+    nom: string
+    email: string
+    role: string
+  },
+  token: string
 }
 
-export async function loginUserHttp(input:ILoginInput) {
+export async function loginUserHttp(input: ILoginInput) {
 
-    return new Promise<LoginResponseType>(async(resolve, reject) => {
-    
-        const res = await fetch(`${APP.apiURL}/login`, {
-            method: "POST",
-            headers:{
-                'Content-Type': "application/json"
-            },
-            body: JSON.stringify(input)
-        })
-        const data = await res.json()
+  return new Promise<LoginResponseType>(async (resolve, reject) => {
 
-        if (!res.ok) {
-            reject(data)
-        }
-        resolve(data)
+    const res = await fetch(`${APP.apiURL}/login`, {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify(input)
     })
-    
+    const data = await res.json()
+
+    if (!res.ok) {
+      reject(data)
+    }
+    resolve(data)
+  })
+
 }
