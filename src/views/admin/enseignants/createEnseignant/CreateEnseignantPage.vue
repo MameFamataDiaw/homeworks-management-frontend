@@ -15,7 +15,7 @@ import { createEnseignantHttp } from './actions/CreateEnseignant'
 import { Genre } from '@/views/auth/auth-types'
 
 
-const enseignantInput = ref<ICreateEnseignantInput|IUpdateEnseignantInput>({
+const enseignantInput = ref<ICreateEnseignantInput | IUpdateEnseignantInput>({
   id: enseignantStore.editEnseignantData.id,
   prenom: enseignantStore.editEnseignantData.prenom,
   nom: enseignantStore.editEnseignantData.nom,
@@ -53,45 +53,137 @@ async function createOrUpdateEnseignant() {
     loadingStatus.value = true
 
     enseignantStore.editEnseignant.edit
-    ?await updateEnseignant()
-    :await createEnseignant()
+      ? await updateEnseignant()
+      : await createEnseignant()
 
     v$.value.$reset()
     loadingStatus.value = false
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error:any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     loadingStatus.value = false
     showError(error.message)
   }
 
 }
-async function createEnseignant(){
+async function createEnseignant() {
   const data = await createEnseignantHttp(enseignantInput.value)
-    // TYPE ASSERTION
-    enseignantInput.value = {} as ICreateEnseignantInput
-    successMsg(data.message)
+  // TYPE ASSERTION
+  enseignantInput.value = {} as ICreateEnseignantInput
+  successMsg(data.message)
 }
 
-async function updateEnseignant(){
+async function updateEnseignant() {
   const data = await updateEnseignantHttp(enseignantInput.value as IUpdateEnseignantInput)
-    // TYPE ASSERTION
-    enseignantStore.editEnseignantData = {} as IUpdateEnseignantInput
-    enseignantInput.value = {} as ICreateEnseignantInput
-    enseignantStore.editEnseignant.edit = false
-    router.push('/enseignants-list')
-    successMsg(data.message)
+  // TYPE ASSERTION
+  enseignantStore.editEnseignantData = {} as IUpdateEnseignantInput
+  enseignantInput.value = {} as ICreateEnseignantInput
+  enseignantStore.editEnseignant.edit = false
+  router.push('/enseignants-list')
+  successMsg(data.message)
 
 
 }
 </script>
-
 <template>
-  <div class="row">
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="content container-fluid">
+        <div class="page-header">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="page-title">Add Teachers</h3>
+              <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="teachers.html">Teachers</a>
+                </li>
+                <li class="breadcrumb-item active">Add Teachers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <form @submit.prevent="createOrUpdateEnseignant">
+                  <div class="row">
+                    <div class="col-12">
+                      <h5 class="form-title"><span>Information de l'enseignant</span></h5>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Prenom de l'enseignant" :formErrors="v$.prenom.$errors">
+                          <input type="text" v-model="enseignantInput.prenom" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Nom de l'enseignant" :formErrors="v$.nom.$errors">
+                          <input type="text" v-model="enseignantInput.nom" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Genre" :formErrors="v$.genre.$errors">
+                          <select v-model="enseignantInput.genre" id="genre" class="form-control select">
+                            <option v-for="(value, key) in genre" :key="key" :value="value">
+                              {{ value }}
+                            </option>
+                          </select>
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Numero de telephone" :formErrors="v$.telephone.$errors">
+                          <input type="text" v-model="enseignantInput.telephone" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Email" :formErrors="v$.email.$errors">
+                          <input type="email" v-model="enseignantInput.email" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Mot de passe" v-if="!enseignantStore.editEnseignant.edit"
+                          :formErrors="v$.password.$errors">
+                          <input type="password" v-model="enseignantInput.password" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <br />
+                    <RouterLink to="/enseignants-list">Voir la liste des enseignants</RouterLink>
+                    <br />
+                    <div class="col-12">
+                      <div class="student-submit">
+                        <BaseBtn :class="enseignantStore.editEnseignant.edit ? 'btn btn-warning' : 'btn btn-primary'"
+                          :label="enseignantStore.editEnseignant.edit ? 'Modifier les informations de l\'enseignant' : 'Creer un  compte enseignant'"
+                          :loading="loadingStatus" />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header">Créer une classe {{ enseignantStore.editEnseignantData}} </div>
+        <div class="card-header">Créer une classe {{ enseignantStore.editEnseignantData }} </div>
         <div class="card-body">
           <form action="" @submit.prevent="createOrUpdateEnseignant">
             <Error inputLabel="Prenom de l'enseignant" :formErrors="v$.prenom.$errors">
@@ -118,7 +210,8 @@ async function updateEnseignant(){
               <input type="email" v-model="enseignantInput.email" class="form-control" />
             </Error>
 
-            <Error inputLabel="Mot de passe" v-if="!enseignantStore.editEnseignant.edit" :formErrors="v$.password.$errors">
+            <Error inputLabel="Mot de passe" v-if="!enseignantStore.editEnseignant.edit"
+              :formErrors="v$.password.$errors">
               <input type="password" v-model="enseignantInput.password" class="form-control" />
             </Error>
 
@@ -126,15 +219,14 @@ async function updateEnseignant(){
             <RouterLink to="/enseignants-list">Voir la liste des enseignants</RouterLink>
             <br />
             <div class="form-group">
-              <BaseBtn
-              :class="enseignantStore.editEnseignant.edit ? 'btn btn-warning' : 'btn btn-primary'"
-              :label="enseignantStore.editEnseignant.edit ? 'Modifier les informations de l\'enseignant' : 'Creer un  compte enseignant'"
-              :loading="loadingStatus" />
+              <BaseBtn :class="enseignantStore.editEnseignant.edit ? 'btn btn-warning' : 'btn btn-primary'"
+                :label="enseignantStore.editEnseignant.edit ? 'Modifier les informations de l\'enseignant' : 'Creer un  compte enseignant'"
+                :loading="loadingStatus" />
             </div>
           </form>
         </div>
       </div>
     </div>
     <div class="col-md-4"></div>
-  </div>
+  </div> -->
 </template>

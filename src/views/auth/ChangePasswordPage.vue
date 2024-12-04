@@ -49,7 +49,16 @@ async function changePassword() {
     const data = await changePasswordHttp(changePasswordInput.value);
     successMsg(data.message);
     changePasswordInput.value = { password: '', password_confirmation: '' };
-    router.push('/dashboard');
+    if (data.user.role === 'enseignant') {
+      router.push('/enseignant-dashboard');
+    } else if (data.user.role === 'eleve') {
+      router.push('/eleve-dashboard');
+    } else if (data.user.role === 'parent') {
+      router.push('/parent-dashboard');
+    } else {
+      router.push('/dashboard'); // Redirection par défaut
+    }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     showError(error.message || "Une erreur s'est produite.");

@@ -1,71 +1,52 @@
 <script setup lang="ts">
-  import { getUserData } from "@/helper/getUserData";
-  import { RouterLink, RouterView } from "vue-router";
-import { logoutUserHttp } from "./admin/actions/LogoutUser";
-import { successMsg } from "@/helper/Toastnotification";
-import { onMounted } from "vue";
-import { userIsLoggedInHttp } from "./admin/actions/UserIsLoggedIn";
 
-  const userData = getUserData()
+  import HeaderComponent from "@/components/Header.vue";
+import SidebarComponent from "@/components/Sidebar.vue"
+// console.log(window.jQuery); // Devrait afficher la fonction jQuery
+// console.log($("#summernote")); // Devrait trouver votre élément
 
-  async function logoutUser(){
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    const userId = userData?.user?.id!
-    if (typeof userId! !== 'undefined') {
-      const data = await logoutUserHttp(userId)
-      localStorage.clear()
-      successMsg(data.message)
-      setTimeout(() => {
-        window.location.href="/"
-      }, 2000)
 
-    }
 
-  }
 
-  async function userIsLoggedIn(){
-    try {
-      await userIsLoggedInHttp()
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error:any) {
-      //console.log(error)
-      //if (error instanceof Error) {
-        console.log(error)
-        if (error.message == 'Unauthenticated.') {
-          window.location.href="/"
-        }
-      //}
-    }
-  }
-
-  onMounted(async() =>{
-    await userIsLoggedIn()
-  })
 </script>
 <template>
-    <div class="container">
-        <div>
-            <span>Name : {{ userData?.user?.prenom }}</span>
-            <br />
-            <span>
-                Email : <a href="">{{ userData?.user?.email }}</a>
-            </span><br />
-            <span style="color: red; cursor: pointer;" @click="logoutUser"><b>Se deconnecter</b></span>
-        </div>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd">
-            <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <RouterLink class="nav-link" aria-current="page" to="/dashboard">Dashbaord</RouterLink>
-                </li>
+   <div>
+    <HeaderComponent />
+    <SidebarComponent />
+    <!-- <FooterComponent /> -->
+  </div>
+  <div class="main-wrapper">
+
+        <div class="page-wrapper">
+          <div class="content container-fluid">
+          <div class="page-header">
+            <div class="row">
+              <div class="col">
+                <h3 class="page-title">Text Editor</h3>
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="index.html">Dashboard</a>
+                  </li>
+                  <li class="breadcrumb-item active">Components</li>
                 </ul>
+              </div>
             </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title">Editor</h5>
+                </div>
+                <div class="card-body">
+                  <div id="summernote"></div>
+                </div>
+              </div>
             </div>
-        </nav>
-        <br />
-        <br />
+          </div>
+        </div>
+        </div>
 
         <div class="row">
             <RouterView />

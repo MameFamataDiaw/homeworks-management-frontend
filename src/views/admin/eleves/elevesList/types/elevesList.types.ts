@@ -2,6 +2,11 @@ import type { ICreateEleveInput } from "../../createEleve/types/createEleve.type
 
 export interface IElevesList extends ICreateEleveInput {
   id: number
+  parent?: {
+    prenom: string
+    nom: string
+    telephone: string
+  }
 }
 
 export interface IEditEleveDataInput extends ICreateEleveInput {

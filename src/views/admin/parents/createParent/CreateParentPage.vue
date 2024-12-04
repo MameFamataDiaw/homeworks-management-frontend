@@ -87,7 +87,99 @@ async function updateParent(){
 </script>
 
 <template>
-  <div class="row">
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="content container-fluid">
+        <div class="page-header">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="page-title">Ajouter un parent</h3>
+              <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="teachers.html">Parents</a>
+                </li>
+                <li class="breadcrumb-item active">Add Parents</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <form @submit.prevent="createOrUpdateParent">
+                  <div class="row">
+                    <div class="col-12">
+                      <h5 class="form-title"><span>Information de l'parent</span></h5>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Prenom de l'parent" :formErrors="v$.prenom.$errors">
+                          <input type="text" v-model="parentInput.prenom" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Nom de l'parent" :formErrors="v$.nom.$errors">
+                          <input type="text" v-model="parentInput.nom" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Genre" :formErrors="v$.genre.$errors">
+                          <select v-model="parentInput.genre" id="genre" class="form-control select">
+                            <option v-for="(value, key) in genre" :key="key" :value="value">
+                              {{ value }}
+                            </option>
+                          </select>
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Numero de telephone" :formErrors="v$.telephone.$errors">
+                          <input type="text" v-model="parentInput.telephone" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Email" :formErrors="v$.email.$errors">
+                          <input type="email" v-model="parentInput.email" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                      <div class="form-group local-forms">
+                        <Error inputLabel="Mot de passe" v-if="!parentStore.editParent.edit"
+                          :formErrors="v$.password.$errors">
+                          <input type="password" v-model="parentInput.password" class="form-control" />
+                        </Error>
+                      </div>
+                    </div>
+                    <br />
+                    <RouterLink to="/parents-list">Voir la liste des parents</RouterLink>
+                    <br />
+                    <div class="col-12">
+                      <div class="student-submit">
+                        <BaseBtn :class="parentStore.editParent.edit ? 'btn btn-warning' : 'btn btn-primary'"
+                          :label="parentStore.editParent.edit ? 'Modifier les informations de l\'parent' : 'Creer un  compte parent'"
+                          :loading="loadingStatus" />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-6">
       <div class="card">
@@ -136,5 +228,5 @@ async function updateParent(){
       </div>
     </div>
     <div class="col-md-4"></div>
-  </div>
+  </div> -->
 </template>

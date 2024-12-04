@@ -3,6 +3,13 @@ import type { IChangePasswordInput } from "../auth-types";
 
 type ChangePasswordResponseType = {
   message: string
+  user: {
+    id: number
+    prenom: string
+    nom: string
+    email: string
+    role: string
+  },
 }
 
 export async function changePasswordHttp(input: IChangePasswordInput) {

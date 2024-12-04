@@ -74,7 +74,71 @@ async function updateClasse(){
 </script>
 
 <template>
-  <div class="row">
+
+<div class="main-wrapper">
+  <div class="page-wrapper">
+        <div class="content container-fluid">
+          <div class="page-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h3 class="page-title">Ajouter une classe</h3>
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="subjects.html">Classe</a>
+                  </li>
+                  <li class="breadcrumb-item active">Ajouter une classe</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body">
+                  <form action="" @submit.prevent="createOrUpdateClasse">
+                    <div class="row">
+                      <div class="col-12">
+                        <h5 class="form-title">
+                          <span>Information de la classe</span>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group local-forms">
+                          <Error inputLabel="Nom de la classe" :formErrors="v$.nomClasse.$errors">
+                            <input type="text" v-model="classeInput.nomClasse" class="form-control" />
+                          </Error>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group local-forms">
+                          <Error inputLabel="Niveau de la classe" :formErrors="v$.niveau.$errors">
+                            <input type="text" v-model="classeInput.niveau" class="form-control" />
+                          </Error>
+                        </div>
+                      </div>
+                      <br />
+                      <RouterLink to="/classes-list">Voir la liste des classes</RouterLink>
+                      <br />
+                      <div class="col-12">
+                        <div class="student-submit">
+                          <BaseBtn
+                          :class="classeStore.editClasse.edit ? 'btn btn-warning' : 'btn btn-primary'"
+                          :label="classeStore.editClasse.edit ? 'Modifier classe' : 'Creer une classe'"
+                          :loading="loadingStatus" />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+  <!-- <AddClasseComponent /> -->
+  <!-- <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-6">
       <div class="card">
@@ -103,5 +167,5 @@ async function updateClasse(){
       </div>
     </div>
     <div class="col-md-4"></div>
-  </div>
+  </div> -->
 </template>

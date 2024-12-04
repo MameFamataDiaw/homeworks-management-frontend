@@ -9,7 +9,8 @@ export interface IRegisterInput {
   genre: Genre
   email: string
   password: string
-  role?: string;
+  password_confirmation: string
+  role?: string
 }
 
 export interface ILoginInput {

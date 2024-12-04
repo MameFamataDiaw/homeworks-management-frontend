@@ -52,8 +52,14 @@ onMounted(async()=>{
 })
 
 </script>
-
 <template>
+  <ClasseTable
+        :classes="classes"
+        @deleteClasse="deleteClasse"
+        @editClasse="editClasseData"
+        />
+</template>
+<!-- <template>
 
     <div class="row">
       <div class="col-md-8">
@@ -69,12 +75,6 @@ onMounted(async()=>{
         @deleteClasse="deleteClasse"
         @editClasse="editClasseData"
         />
-        <!-- <Bootstrap5Pagination
-        :data="classes"
-        @pagination-change-page="showClasses"
-         /> -->
-
-
       </div>
     </div>
-  </template>
+  </template> -->
