@@ -116,6 +116,14 @@ const router = createRouter({
       path: '/parent-dashboard',
       name: 'parentDashboard',
       component: () => import('@/views/parents/ParentDashboard.vue'),
+      // children: [
+      //   {
+      //     path: 'classe/:classeId',
+      //     name: 'ParentClasse',
+      //     component: () => import(''),
+      //     props: true,
+      //   },
+      // ],
     },
     {
       path: '/consult-devoir',
@@ -149,6 +157,11 @@ const router = createRouter({
       path: '/show-devoir',
       name: 'show-devoir',
       component: () => import('../views/enseignants/devoirs/showDevoir/ShowDevoirPage.vue'),
+    },
+    {
+      path: '/assign-devoir',
+      name: 'assign-devoir',
+      component: () => import('../views/enseignants/devoirs/assignDevoir/components/assignDevoir.vue'),
     },
     {
       path: '/submits-list',

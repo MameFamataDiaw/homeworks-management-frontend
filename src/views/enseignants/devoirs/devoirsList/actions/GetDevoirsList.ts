@@ -4,7 +4,7 @@ import type { IDevoirsList } from "../types/devoirsList.types";
 
 export type GetDevoirsResponseType = {
   status: boolean;
-  devoirs: Array<IDevoirsList>
+  data: Array<IDevoirsList>
 } & Record<string, string | number>
 
 export async function getDevoirsHttp() {
@@ -17,7 +17,7 @@ export async function getDevoirsHttp() {
       headers: headers,
     })
     const data = await res.json()
-    console.log("Data fetched:", data);
+
     if (!res.ok) {
       reject(data)
     }

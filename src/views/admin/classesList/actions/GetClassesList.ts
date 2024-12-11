@@ -11,7 +11,7 @@ export async function getClassesHttp(page: number, query: string) {
   const { headers } = verifyToken()
   return new Promise<GetClassesResponseType>(async (resolve, reject) => {
 
-    const res = await fetch(`${APP.apiURL}/classes/list?page=${page}&query=${query}`, {
+    const res = await fetch(`${APP.apiURL}/admin/classes/list?page=${page}&query=${query}`, {
       method: "GET",
       headers: headers,
     })

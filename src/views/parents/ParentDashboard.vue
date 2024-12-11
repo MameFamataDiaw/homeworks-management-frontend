@@ -1,12 +1,46 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import HeaderComponent from "@/components/Header.vue"
 import SidebarComponent from "@/components/Sidebar.vue"
-import { RouterView } from "vue-router";
+import { onMounted, ref } from "vue";
+import { getDevoirsAssignesHttp } from "./actions/Dashboard";
+import type { IChildClassInfo } from "./types/assignDevoirs.types";
+import { showError } from "@/helper/Toastnotification";
+
+const classChildInfo = ref<IChildClassInfo | null>(null);
+const loading = ref(false);
+
+async function handleChildSelection(selectedChild: IChildClassInfo) {
+  try {
+    loading.value = true;
+    const response = await getDevoirsAssignesHttp(selectedChild.id); // Assurez-vous que l'ID est disponible
+    classChildInfo.value = response.data;
+  } catch (error: any) {
+    showError(error.message || "Une erreur s'est produite.");
+  } finally {
+    loading.value = false;
+  }
+}
+
+// Le chargement initial peut rester, mais il utilisera maintenant le premier enfant par défaut
+async function fetchClassChildInfo() {
+  try {
+    loading.value = true;
+    const response = await getDevoirsAssignesHttp();
+    classChildInfo.value = response.data;
+  } catch (error: any) {
+    showError(error.message || "Une erreur s'est produite.");
+  } finally {
+    loading.value = false;
+  }
+}
+  onMounted(fetchClassChildInfo)
+
 </script>
 <template>
   <div>
     <HeaderComponent />
-    <SidebarComponent />
+    <SidebarComponent  @selectEnfant="handleChildSelection" />
     <!-- <FooterComponent /> -->
   </div>
   <div class="main-wrapper">
@@ -17,23 +51,29 @@ import { RouterView } from "vue-router";
           <div class="row">
             <div class="col-sm-12">
               <div class="page-sub-header">
-                <h3 class="page-title">Classe de Aicha</h3>
+                <h3 class="page-title">Classe de {{ classChildInfo?.enfant || '...' }}</h3>
                 <ul class="breadcrumb">
                   <li class="breadcrumb-item"><a href="index.html">Classe</a></li>
-                  <li class="breadcrumb-item active">CE1 A</li>
+                  <li class="breadcrumb-item active">{{ classChildInfo?.classe?.nomClasse || '...' }}</li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
+          <div v-for="(stat, index) in [
+                  { title: 'Devoirs à faire', count: classChildInfo?.stats.total },
+                  { title: 'Soumis', count: classChildInfo?.stats.soumis },
+                  { title: 'Non soumis', count: classChildInfo?.stats.non_soumis }
+                ]"
+                :key="index"
+          class="col-xl-3 col-sm-6 col-12 d-flex">
             <div class="card bg-comman w-100">
               <div class="card-body">
                 <div class="db-widgets d-flex justify-content-between align-items-center">
                   <div class="db-info">
-                    <h6>Devoirs a faire</h6>
-                    <h3>3</h3>
+                    <h6>{{ stat.title }}</h6>
+                    <h3>{{ stat.count || 0 }}</h3>
                   </div>
                   <div class="db-icon">
                     <img src="@/assets/img/icons/student-icon-01.svg" alt="Dashboard Icon" />
@@ -42,7 +82,7 @@ import { RouterView } from "vue-router";
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-sm-6 col-12 d-flex">
+          <!-- <div class="col-xl-3 col-sm-6 col-12 d-flex">
             <div class="card bg-comman w-100">
               <div class="card-body">
                 <div class="db-widgets d-flex justify-content-between align-items-center">
@@ -86,7 +126,7 @@ import { RouterView } from "vue-router";
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="row">
@@ -183,18 +223,19 @@ import { RouterView } from "vue-router";
                           <li>Sep24</li> -->
                         </ul>
                         <ul class="activity-feed">
-                          <li class="feed-item d-flex align-items-center">
+                          <li v-for="(devoir, index) in classChildInfo?.devoirs || []" :key="index"
+                          class="feed-item d-flex align-items-center">
                             <div class="dolor-activity">
-                              <span class="feed-text1"><a>Vocabulaire</a></span>
+                              <span class="feed-text1"><a>{{ devoir.matiere }}</a></span>
                               <ul class="teacher-date-list">
                                 <li>
-                                  <span>Les synonymes</span>
+                                  <span>{{ devoir.module }}</span>
                                   <!-- <i class="fas fa-clock me-2"></i> -->
                                 </li>
                                 <li>|</li>
                                 <li>
                                   <i class="fas fa-calendar-alt me-2"></i
-                                  >02/12/2024
+                                  >{{ devoir.date_soumission }}
                                 </li>
                               </ul>
                             </div>
@@ -205,50 +246,7 @@ import { RouterView } from "vue-router";
                               </button> -->
                             </div>
                           </li>
-                          <li class="feed-item d-flex align-items-center">
-                            <div class="dolor-activity">
-                              <span class="feed-text1"><a>Copie</a></span>
-                              <ul class="teacher-date-list">
-                                <li>
-                                  <span>Ecriture cursive</span>
-                                  <!-- <i class="fas fa-clock me-2"></i> -->
-                                </li>
-                                <li>|</li>
-                                <li>
-                                  <i class="fas fa-calendar-alt me-2"></i
-                                  >02/12/2024
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="activity-btns ms-auto">
-                              <RouterLink to="/consult-devoir" class="btn btn-info">Consulter</RouterLink>
-                              <!-- <button type="submit" class="btn btn-info">
-                                Completed
-                              </button> -->
-                            </div>
-                          </li>
-                          <li class="feed-item d-flex align-items-center">
-                            <div class="dolor-activity">
-                              <span class="feed-text1"><a>Activité de mesure</a></span>
-                              <ul class="teacher-date-list">
-                                <li>
-                                  <span>Le litre et ses multiples</span>
-                                  <!-- <i class="fas fa-clock me-2"></i> -->
-                                </li>
-                                <li>|</li>
-                                <li>
-                                  <i class="fas fa-calendar-alt me-2"></i
-                                  >29/11/2024
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="activity-btns ms-auto">
-                              <RouterLink to="/consult-devoir" class="btn btn-info">Consulter</RouterLink>
-                              <!-- <button type="submit" class="btn btn-info">
-                                In Progress
-                              </button> -->
-                            </div>
-                          </li>
+
                         </ul>
                       </div>
                     </div>

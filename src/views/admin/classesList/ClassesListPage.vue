@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { getClassesHttp, type GetClassesResponseType } from './actions/GetClassesList';
-import { myDebounce } from '@/helper/utils';
+import { closeModal, myDebounce, openModal } from '@/helper/utils';
 import { confirmDelation } from '@/helper/SweetAlert';
 import { deleteClasseHttp } from './actions/DeleteClasse';
 import { successMsg } from '@/helper/Toastnotification';
@@ -9,6 +9,7 @@ import ClasseTable from './components/ClasseTable.vue';
 import type { IEditClasseDataInput } from './types/classesList-types';
 import { classeStore } from '@/stores/admin/classeStore';
 import { useRouter } from 'vue-router';
+import AssignDevoir from '@/views/enseignants/devoirs/assignDevoir/components/assignDevoir.vue';
 // import type { classeStore } from '@/stores/admin/classeStore';
 // import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
@@ -45,7 +46,9 @@ function editClasseData(classeData:IEditClasseDataInput){
   router.push('/create-classe')
 }
 
-
+function showModal(classeId:number){
+  openModal('classModal')
+}
 
 onMounted(async()=>{
   await showClasses()
@@ -53,8 +56,10 @@ onMounted(async()=>{
 
 </script>
 <template>
+  <AssignDevoir @closeModal="closeModal('classModal')"/>
   <ClasseTable
         :classes="classes"
+        @showModal="showModal"
         @deleteClasse="deleteClasse"
         @editClasse="editClasseData"
         />
