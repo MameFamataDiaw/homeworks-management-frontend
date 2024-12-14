@@ -44,7 +44,7 @@ export default defineComponent({
 
     //Simule l'initialisation
     onMounted(async () => {
-      authStore.setRole("eleve"); // Test avec un rôle fixe, remplace-le par la récupération API.
+      authStore.setRole("enseignant"); // Test avec un rôle fixe, remplace-le par la récupération API.
       if (isParent.value) fetchChildren();
     });
 

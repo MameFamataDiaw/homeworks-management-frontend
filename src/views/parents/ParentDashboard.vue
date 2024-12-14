@@ -235,7 +235,7 @@ async function fetchClassChildInfo() {
                                 <li>|</li>
                                 <li>
                                   <i class="fas fa-calendar-alt me-2"></i
-                                  >{{ devoir.date_soumission }}
+                                  >{{ devoir.A_Rendre }}
                                 </li>
                               </ul>
                             </div>

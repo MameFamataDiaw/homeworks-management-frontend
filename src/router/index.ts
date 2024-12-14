@@ -164,9 +164,10 @@ const router = createRouter({
       component: () => import('../views/enseignants/devoirs/assignDevoir/components/assignDevoir.vue'),
     },
     {
-      path: '/submits-list',
+      path: '/submits-list/:devoirId',
       name: 'submits-list',
-      component: () => import('../views/enseignants/soumissions/SoumissionPage.vue'),
+      component: () => import('../views/enseignants/devoirs/soumissions/SoumissionPage.vue'),
+      props: true,
     },
     {
       path: '/send-message',

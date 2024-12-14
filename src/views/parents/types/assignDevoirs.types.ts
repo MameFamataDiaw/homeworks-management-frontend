@@ -8,7 +8,7 @@ export interface IDevoirsAssignes {
   matiere: string
   module: string
   date_attribution: string
-  date_soumission: string
+  A_Rendre: string
   soumis: boolean
   note: number | null
   commentaire: string | null

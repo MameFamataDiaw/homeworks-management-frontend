@@ -3,6 +3,9 @@ import HeaderComponent from "@/components/Header.vue";
 import SidebarComponent from "@/components/Sidebar.vue"
 import { getDevoirsAfaireHttp, type GetAfaireResponseType } from "./actions/getDevoirsAfaire";
 import { ref, onMounted } from "vue";
+import { soumettreDevoirHttp } from "./actions/soumettreDevoir";
+import { confirmSoumission } from "@/helper/SweetAlert";
+import { successMsg } from "@/helper/Toastnotification";
 
 const devoirsAfaire = ref<GetAfaireResponseType | null>(null)
 
@@ -13,6 +16,16 @@ async function showDevoirsAfaire() {
   } catch (error) {
     console.error("Erreur lors de la recuperation des devoirs.", error);
   }
+}
+
+async function handleSoumission(devoirId: number) {
+  confirmSoumission().then(async () => {
+    console.log('response.message')
+    const response = await soumettreDevoirHttp(devoirId);
+    await showDevoirsAfaire();
+    successMsg(response.message)
+  }).catch((error) => console.log(error))
+
 }
 
 onMounted(async () => {
@@ -124,7 +137,7 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="devoir in devoirsAfaire?.devoirs" :key="devoir.id">
+            <tr v-for="devoir in devoirsAfaire?.devoirs" :key="devoir.devoir_id">
               <td>
                 <div class="form-check check-tables">
                   <input class="form-check-input" type="checkbox" value="something" />
@@ -136,12 +149,18 @@ onMounted(async () => {
                   <a>{{ devoir.module }}</a>
                 </h2>
               </td>
-              <td>{{ devoir.dateSoumission }}</td>
+              <td>{{ devoir.aRendre }}</td>
               <td>
                 <button class="btn btn-primary">Voir le contenu</button>
               </td>
               <td>
-                <button class="btn btn-primary">Soumettre</button>
+                <button
+                  class="btn btn-primary"
+                  :disabled="devoir.soumis"
+                  @click="handleSoumission(devoir.devoir_id)"
+                >
+                  {{ devoir.soumis ? "Déjà soumis" : "Soumettre" }}
+                </button>
               </td>
             </tr>
           </tbody>

@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 const assignInput = ref<IAssignedDevoir>({
   id: props.devoirId,
-  dateSoumission: '',
+  aRendre: '',
 } as IAssignedDevoir)
 
 // Mettre a jour l'id quand le devoirId change
@@ -29,7 +29,7 @@ watch(() => props.devoirId, (newId) => {
 
 
 const rules = {
-  dateSoumission: { required }
+  aRendre: { required }
 }
 
 const loadingStatus = ref(false)
@@ -69,9 +69,9 @@ async function assignDevoir() {
           </div>
           <div class="modal-body">
             <div class="form-group row">
-              <Error inputLabel="Date de soumission" :formErrors="v$.dateSoumission.$errors">
+              <Error inputLabel="Date de soumission" :formErrors="v$.aRendre.$errors">
                 <div class="col-md-10">
-                  <input class="form-control" type="date" v-model="assignInput.dateSoumission"/>
+                  <input class="form-control" type="date" v-model="assignInput.aRendre"/>
                 </div>
               </Error>
             </div>

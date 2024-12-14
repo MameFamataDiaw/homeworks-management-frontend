@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
   import HeaderComponent from "@/components/Header.vue"
   import SidebarComponent from "@/components/Sidebar.vue"
@@ -5,6 +6,8 @@
   import { ref, onMounted } from "vue";
   import { getTeacherClassInfoHttp } from "./Dashboard";
   import { showError } from "@/helper/Toastnotification";
+import { getAssignedDevoirsHttp } from "./devoirs/assignDevoir/actions/GetAssignedDevoir";
+import type { GetAssignedDevoirsResponseType } from "./devoirs/assignDevoir/actions/GetAssignedDevoir";
 
   const classInfo = ref({
     classe: "",
@@ -16,6 +19,8 @@
   // devoirs: [],
   })
 
+  const assignedDevoirs = ref<GetAssignedDevoirsResponseType>()
+
   const loading = ref(false);
 
   async function fetchClassInfo(){
@@ -23,7 +28,6 @@
       loading.value = true;
       const data = await getTeacherClassInfoHttp();
       classInfo.value = data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error:any) {
       showError(error.message || "Une erreur s'est produite.");
     } finally {
@@ -31,8 +35,22 @@
     }
   }
 
+  async function showAssignedDevoirs() {
+    try {
+      loading.value = true
+      const data = await getAssignedDevoirsHttp();
+      assignedDevoirs.value = data
+    } catch (error:any) {
+      showError(error.message || "Une erreur s'est produite.");
+    } finally {
+      loading.value = false;
+    }
+
+  }
+
   onMounted(() => {
     fetchClassInfo();
+    showAssignedDevoirs();
   })
 </script>
 <template>
@@ -138,7 +156,7 @@
                       <div
                         class="col-auto text-end float-end ms-auto download-grp"
                       >
-                        <RouterLink to="/submits-list" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i>Voir les soumissions</RouterLink>
+
                         <RouterLink to="/create-devoir" class="btn btn-primary"><i class="fas fa-plus"></i></RouterLink>
                       </div>
                     </div>
@@ -154,104 +172,29 @@
                           <th>Matière</th>
                           <th>Lesson</th>
                           <th>Attribué le</th>
-                          <th>A rendre le</th>
-                          <th class="text-end">Contenu</th>
+                          <th>A rendre</th>
+                          <th class="text-end">Soumissions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>23</td>
-                          <td>Résolution de problèmes</td>
-                          <td>Données utiles, données inutiles</td>
-                          <td>25/11/2024</td>
-                          <td>26/11/2024</td>
-                          <td class="text-end">
+                        <tr v-for="devoir in assignedDevoirs?.devoirs" :key="devoir.id">
+                          <td>{{ devoir.id }}</td>
+                          <td>{{ devoir.matiere }}</td>
+                          <td>{{ devoir.module }}</td>
+                          <td>{{ devoir.soumissions[0].dateAttribution }}</td>
+                          <td>{{ devoir.soumissions[0].aRendre }}</td>
+                          <td>
                             <div class="actions">
-                              <a
-                                href="javascript:;"
+                              <!-- <RouterLink to="/submits-list" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i>Voir les soumissions</RouterLink> -->
+                              <RouterLink :to="`/submits-list/${devoir.id}`"
                                 class="btn btn-sm bg-success-light me-2"
                               >
                                 <i class="feather-eye"></i>
-                              </a>
-                              <!-- <a
-                                href="edit-exam.html"
-                                class="btn btn-sm bg-danger-light"
-                              >
-                                <i class="feather-edit"></i>
-                              </a> -->
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>24</td>
-                          <td>Conjugaison</td>
-                          <td>Infinitif des verbes</td>
-                          <td>27/11/2024</td>
-                          <td>29/11/2024</td>
-                          <td class="text-end">
-                            <div class="actions">
-                              <a
-                                href="javascript:;"
-                                class="btn btn-sm bg-success-light me-2"
-                              >
-                                <i class="feather-eye"></i>
-                              </a>
-                              <!-- <a
-                                href="edit-exam.html"
-                                class="btn btn-sm bg-danger-light"
-                              >
-                                <i class="feather-edit"></i>
-                              </a> -->
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>25</td>
-                          <td>Activité géomètrique</td>
-                          <td>ligne droite - ligne brisée</td>
-                          <td>30/11/2024</td>
-                          <td>02/12/2024</td>
-                          <td class="text-end">
-                            <div class="actions">
-                              <a
-                                href="javascript:;"
-                                class="btn btn-sm bg-success-light me-2"
-                              >
-                                <i class="feather-eye"></i>
-                              </a>
-                              <!-- <a
-                                href="edit-exam.html"
-                                class="btn btn-sm bg-danger-light"
-                              >
-                                <i class="feather-edit"></i>
-                              </a> -->
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>26</td>
-                          <td>Vocabulaire</td>
-                          <td>Employer les connecteurs logiques</td>
-                          <td>30/11/2024</td>
-                          <td>02/12/2024</td>
-                          <td class="text-end">
-                            <div class="actions">
-                              <a
-                                href="javascript:;"
-                                class="btn btn-sm bg-success-light me-2"
-                              >
-                                <i class="feather-eye"></i>
-                              </a>
-                              <!-- <a
-                                href="edit-exam.html"
-                                class="btn btn-sm bg-danger-light"
-                              >
-                                <i class="feather-edit"></i>
-                              </a> -->
-                            </div>
-                          </td>
-                        </tr>
+                              </RouterLink>
 
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
